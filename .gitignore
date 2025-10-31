@@ -1,0 +1,17 @@
+# Ignore virtual environments and system files
+logenv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+*.log
+.env
+.DS_Store
+.vscode/
+.idea/
+
+# Ignore big or local-only stuff
+models/
+logs/
+training/
+*.tar
