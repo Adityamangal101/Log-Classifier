@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Use the same port Render provides
-PORT=${PORT:-10000}
+PORT=${PORT:-9000}
 
 # Start FastAPI in the background (same port)
 echo "🚀 Starting FastAPI server..."
