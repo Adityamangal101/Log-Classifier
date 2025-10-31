@@ -14,3 +14,4 @@ __pycache__/
 logs/
 training/
 *.tar
+oldstart.sh
