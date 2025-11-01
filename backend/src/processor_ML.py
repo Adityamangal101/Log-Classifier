@@ -1,14 +1,18 @@
 from sentence_transformers import SentenceTransformer
 import joblib
 
-# Load the sentence transformer model to compute log_message embedding
-transformer_model=SentenceTransformer('all-MiniLM-L6-v2')
+transformer_model = None
+classifier_model = None
 
-#Load the saved classification model
-classifier_model=joblib.load('models/log_classifier.joblib')
+def load_models():
+    global transformer_model, classifier_model
+    if transformer_model is None or classifier_model is None:
+        transformer_model = SentenceTransformer('all-MiniLM-L6-v2')
+        classifier_model = joblib.load('models/log_classifier.joblib')
 
 def classify_with_bert(log_message):
-   
+    
+    load_models()  # ensure models are loaded
     #Compute embeddings for the log message
     msg_embedding=transformer_model.encode(log_message)
 
