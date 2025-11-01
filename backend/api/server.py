@@ -48,7 +48,7 @@ async def classify_logs(file: UploadFile):
         df["target_label"]=classify(list(zip(df['source'],df['log_message'])))
 
         # Save the modified file
-        output_file='testing/new_output.csv'
+        output_file='Outputs/new_output.csv'
         df.to_csv(output_file,index=False)
         logging.info(f"Classification completed. File saved to {output_file}")
         return FileResponse(output_file,media_type='test/csv')

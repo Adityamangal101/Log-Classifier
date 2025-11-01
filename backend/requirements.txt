@@ -14,9 +14,5 @@ joblib
 matplotlib
 scikit-learn
 
-# --------------------
-# Frontend (Streamlit)
-# --------------------
-streamlit==1.39.0
-plotly==5.24.1
+
 
