@@ -14,4 +14,4 @@ ENV PORT=8000
 EXPOSE $PORT
 
 # Bind FastAPI to the provided port
-CMD ["bash", "-c", "uvicorn api.server:app --host 0.0.0.0 --port $PORT"]
+CMD ["uvicorn", "api.server:app", "--host", "0.0.0.0", "--port", $PORT]

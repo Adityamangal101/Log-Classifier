@@ -15,4 +15,4 @@ ENV PORT=8501
 EXPOSE $PORT
 
 # Streamlit must use the assigned Render port
-CMD ["bash", "-c", "streamlit run dashboard/st_app.py --server.port=$PORT --server.address=0.0.0.0"]
+CMD ["streamlit", "run", "dashboard/st_app.py", "--server.port=$PORT", "--server.address=0.0.0.0"]
