@@ -2,17 +2,16 @@ FROM python:3.10-slim
 
 WORKDIR /app
 
-# Copy dependency file and install dependencies
+# Install dependencies
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy all project files
+# Copy all app files
 COPY . .
 
-# Render dynamically assigns the PORT env variable, default to 8501 for local dev
+# Render dynamically assigns the PORT variable
 ENV PORT=8501
-
 EXPOSE $PORT
 
-# Streamlit must use the assigned Render port
-CMD ["streamlit", "run", "dashboard/st_app.py", "--server.port=$PORT", "--server.address=0.0.0.0"]
+# ✅ Shell command so ${PORT} expands
+CMD bash -c "streamlit run dashboard/st_app.py --server.port=${PORT} --server.address=0.0.0.0"
