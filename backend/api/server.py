@@ -47,6 +47,9 @@ async def classify_logs(file: UploadFile):
         # Perform classification
         df["target_label"]=classify(list(zip(df['source'],df['log_message'])))
 
+        # Ensure Outputs directory exists
+        os.makedirs("Outputs", exist_ok=True)
+        
         # Save the modified file
         output_file='Outputs/new_output.csv'
         df.to_csv(output_file,index=False)

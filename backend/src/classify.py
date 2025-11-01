@@ -28,7 +28,7 @@ def classify_csv(input_file):
     #Perform classification
     df["target_label"]= classify(zip(df["source"],df['log_message']))
        
-    df.to_csv("testing/output.csv",index=False)
+    df.to_csv("Outputs/output.csv",index=False)
 
 if __name__=="__main__":
     classify_csv('testing/test.csv')
