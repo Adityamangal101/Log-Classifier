@@ -30,7 +30,7 @@ if st.session_state["page"] == "Classify Logs":
             with st.spinner("Classifying logs... Please wait ⏳"):
                 try:
                     files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "text/csv")}
-                    response = requests.post("http://localhost:8080/classify", files=files)
+                    response = requests.post("https://log-classifier-backend-a4qw.onrender.com/classify", files=files)
 
                     if response.status_code == 200:
                         classified_csv = response.content
