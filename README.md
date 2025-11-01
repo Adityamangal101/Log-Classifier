@@ -1,174 +1,165 @@
-# 🧠 Log Classification with Hybrid NLP Framework
+🧠 Log Classification with Hybrid NLP Framework
 
-This project implements an intelligent **Hybrid Log Classification System** that combines **Regex**, **ML (Sentence Transformer + Logistic Regression)**, and **LLM-based approaches** to accurately classify log messages into categories.  
-It’s designed as a complete end-to-end system — from preprocessing and model training to API deployment — making it a showcase of both **Machine Learning** and **Software Engineering** skills.
+This project implements an intelligent Hybrid Log Classification System combining Regex, Machine Learning (Sentence Transformer + Logistic Regression), and LLM-based reasoning to classify log messages into meaningful categories.
 
----
+It’s a complete end-to-end production system, featuring separate FastAPI backend and Streamlit frontend—packaged via Docker and deployable on Render.
 
-## ⚙️ Hybrid Classification Pipeline
-
-The system uses a **three-stage decision pipeline** for log classification:
-
-1. **🧩 Regular Expression (Regex)**
-   - Handles simple and recurring log patterns efficiently.
-   - Useful for logs with predictable formats (e.g., “ERROR 404”, “Connection Timeout”).
-
-2. **🔍 Sentence Transformer + Logistic Regression**
-   - Manages complex log messages with structured training data.
-   - Sentence embeddings are extracted using `sentence-transformers`, and classification is done via Logistic Regression.
-
-3. **🧠 Large Language Model (LLM)**
-   - Used when the training data is limited or ambiguous.
-   - Acts as a fallback classifier for logs that don’t match Regex or model predictions confidently.
-
----
-
-## 📁 Project Structure
-
-```
-Log_classification_project/
+🏗️ Project Architecture
+Log_Classification_Project/
 │
-├── api/
-│   └── server.py                # FastAPI server for inference
+├── backend/
+│   ├── api/
+│   │   └── server.py             # FastAPI backend API
+│   ├── src/
+│   │   ├── classify.py           # Core hybrid classification pipeline
+│   │   ├── processor_regex.py    # Regex-based classification logic
+│   │   ├── preprocess.py         # Text cleaning and preprocessing
+│   ├── models/
+│   │   ├── log_model.pkl         # Logistic Regression model
+│   │   └── sentence_transformer/ # Sentence Transformer model
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── start.sh                  # Backend startup script
 │
-├── src/
-│   ├── classify.py              # Core classification pipeline
-│   ├── processor_regex.py       # Regex-based classification logic
-│   ├── preprocess.py            # Text cleaning & preprocessing functions
-│
-├── models/
-│   ├── log_model.pkl            # Trained Logistic Regression model
-│   └── sentence_transformer/    # Sentence Transformer embeddings
+├── frontend/
+│   ├── dashboard/
+│   │   └── st_app.py             # Streamlit dashboard for visualization
+│   ├── requirements.txt
+│   ├── Dockerfile
+│   └── start.sh                  # Frontend startup script
 │
 ├── resources/
-│   ├── example_logs.csv         # Example input dataset
-│   └── arch.png                 # Architecture diagram
+│   ├── example_logs.csv
+│   └── architecture.png
 │
-├── Dockerfile                   # Docker build configuration
-├── requirements.txt             # Project dependencies
-└── README.md                    # Documentation
-```
+└── README.md
 
----
+⚙️ Hybrid Classification Workflow
 
-## 🚀 Setup Instructions
+The hybrid classifier follows a three-tiered logic flow:
 
-### 1️⃣ Clone the Repository
-```bash
+🧩 Regex Layer
+Quickly detects well-known or patterned log formats (e.g. ERROR 404, Timeout, Disk full).
+
+🔍 ML Layer (Sentence Transformer + Logistic Regression)
+Encodes log messages and predicts labels using a trained model for structured log data.
+
+🧠 LLM Fallback Layer
+Invoked when the above two models return uncertain predictions or ambiguous messages.
+
+🚀 Local Setup
+1️⃣ Clone the Repository
 git clone https://github.com/<your-username>/log-classification.git
 cd log-classification
-```
 
-### 2️⃣ Create a Virtual Environment
-```bash
+2️⃣ Backend Setup
+cd backend
 python -m venv logenv
-logenv\Scripts\activate        # For Windows
-```
-### 🔗 Download Pre-Trained Model
-You can download the trained model here:
-👉 [Google Drive Link](https://drive.google.com/your-link)
-
-Once downloaded, place it inside:
-models/log_classifier.joblib
-
-### 3️⃣ Install Dependencies
-```bash
+logenv\Scripts\activate          # (Windows)
 pip install -r requirements.txt
-```
+uvicorn api.server:app --host 0.0.0.0 --port 8000
 
-### 4️⃣ Run the FastAPI Server
-```bash
-cd api
-uvicorn server:app --reload
-```
 
-Server will start at:  
-- 🌐 `http://127.0.0.1:8000/`  
-- 📘 Docs: `http://127.0.0.1:8000/docs`  
-- 🔍 Redoc: `http://127.0.0.1:8000/redoc`
+Endpoints:
 
----
+API Root → http://127.0.0.1:8000/
 
-## 💻 Optional: Streamlit Frontend
+Swagger UI → http://127.0.0.1:8000/docs
 
-A simple **Streamlit dashboard** can be used to upload a CSV file and visualize results (predicted log categories, confidence, charts).
+Redoc → http://127.0.0.1:8000/redoc
 
-Run it with:
-```bash
-streamlit run app.py
-```
+3️⃣ Frontend Setup
+cd ../frontend
+pip install -r requirements.txt
+streamlit run dashboard/st_app.py
 
----
 
-## 🐳 Docker Deployment
+Once running, visit → http://localhost:8501
 
-### 1️⃣ Build Docker Image
-```bash
-docker build -t log-classification-app .
-```
+🧩 Update API_URL inside your Streamlit app to point to your deployed backend API:
 
-### 2️⃣ Run Docker Container
-```bash
-docker run -p 8000:8000 log-classification-app
-```
+API_URL = "https://your-backend-service.onrender.com/classify"
 
-### 3️⃣ Access the App
-Open your browser and go to:  
-👉 `http://localhost:8000/docs`
+🐳 Docker Setup
 
----
+Each module (backend + frontend) has its own Dockerfile.
 
-## 📊 Example Input
+🧠 Build Backend Image
+cd backend
+docker build -t log-backend .
+docker run -p 8000:8000 log-backend
 
-| source | log_message |
-|--------|--------------|
-| app1 | Connection failed due to timeout |
-| app2 | FileNotFoundError: dataset.csv missing |
+📊 Build Frontend Image
+cd ../frontend
+docker build -t log-frontend .
+docker run -p 8501:8501 log-frontend
 
----
+🌐 Deploy on Render
+1️⃣ Create Two Services:
+Service	Folder	Type	Port
+Backend Service	/backend	FastAPI (Docker)	8000
+Frontend Service	/frontend	Streamlit (Docker)	8501
+2️⃣ Environment Variables
 
-## 📈 Example Output
+In both Render services:
 
-| source | log_message | target_label |
-|--------|--------------|---------------|
-| app1 | Connection failed due to timeout | NetworkError |
-| app2 | FileNotFoundError: dataset.csv missing | IOError |
+PYTHON_VERSION = 3.10
 
----
 
-## 🧾 Logging
+For backend, also add:
 
-The project uses Python’s built-in **`logging`** module for:
-- Tracking prediction requests
-- Monitoring model inference time
-- Debugging unexpected log formats
+MODEL_PATH = ./models/log_model.pkl
 
-Logs appear directly in the **VS Code terminal** or **Docker container logs** during runtime.
+3️⃣ Update Frontend URL
 
----
+After backend deploy, copy its Render URL and update in st_app.py:
 
-## 🧠 Tech Stack
+API_URL = "https://your-backend.onrender.com/classify"
 
-| Category | Technology |
-|-----------|-------------|
-| **Language** | Python |
-| **Frameworks** | FastAPI, Streamlit |
-| **ML/NLP** | Sentence-Transformers, Scikit-learn |
-| **Visualization** | Plotly, Matplotlib |
-| **Deployment** | Docker |
-| **Version Control** | Git & GitHub |
 
----
+Then commit & push:
 
-## 👨‍💻 Author
+git add .
+git commit -m "Updated backend API URL"
+git push origin main
 
-**Aditya Mangal**  
-💼 Data Science & ML Developer  
-🔗 [LinkedIn](https://linkedin.com/in/aditya-mangal)  
-📂 [GitHub](https://github.com/aditya-mangal)
 
----
+Render will automatically rebuild and redeploy your frontend service.
 
-## 🪪 License
-This project is for **educational and portfolio purposes** only.  
-All rights reserved © 2025 Aditya Mangal.
+📊 Example Input & Output
+source	log_message
+app1	Connection failed due to timeout
+app2	FileNotFoundError: dataset.csv missing
+
+Predicted Output:
+
+source	log_message	target_label
+app1	Connection failed due to timeout	NetworkError
+app2	FileNotFoundError: dataset.csv missing	IOError
+🧾 Logging
+
+The system logs:
+
+API requests and responses
+
+Model inference times
+
+Confidence thresholds and fallback logic
+
+Logs appear in your Render dashboard or local Docker console.
+
+🧠 Tech Stack
+Category	Tools Used
+Language	Python
+Frameworks	FastAPI, Streamlit
+ML/NLP	Sentence-Transformers, Scikit-learn
+Data Viz	Plotly, Matplotlib
+Deployment	Docker, Render
+Version Control	Git & GitHub
+👨‍💻 Author
+
+Aditya Mangal
+💼 Data Science & ML Developer
+🔗 LinkedIn
+
+📂 GitHub
