@@ -8,6 +8,12 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 WORKDIR /app
 
+# Copy only requirements first (better caching)
+COPY requirements.txt .
+
+# Upgrade pip
+RUN pip install --upgrade pip
+
 # Install PyTorch CPU wheels
 RUN pip install torch torchvision torchaudio --index-url https://download.pytorch.org/whl/cpu
 
