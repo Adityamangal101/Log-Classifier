@@ -4,6 +4,7 @@ import requests
 import io
 import plotly.express as px
 
+
 st.set_page_config(page_title="Log Classifier Dashboard", layout="wide")
 
 st.title("🧠 Log Classification & Analytics Dashboard")
@@ -24,7 +25,7 @@ if st.session_state["page"] == "Classify Logs":
     st.markdown("### 📂 Need a sample log file? Download below:")
 
     try:
-            with open("../Sample_log_files.csv", "rb") as f:
+            with open("Sample_log_files.csv", "rb") as f:
                 sample_data = f.read()
 
             st.download_button(
