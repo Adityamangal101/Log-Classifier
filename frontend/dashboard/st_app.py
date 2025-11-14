@@ -19,6 +19,18 @@ if "classified_df" not in st.session_state:
 # ---------------- PAGE 1: CLASSIFICATION ----------------
 if st.session_state["page"] == "Classify Logs":
     uploaded_file = st.file_uploader("Upload a log CSV file", type=["csv"])
+    
+    st.markdown("Don't have a log file? Download a sample to test 👇")
+
+    with open("../Sample_log_files.csv", "rb") as f:
+         sample_data = f.read()
+
+    st.download_button(
+      label="⬇️ Download Sample Log File",
+      data=sample_data,
+      file_name="sample_logs.csv",
+      mime="text/csv",
+    )
 
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
@@ -30,7 +42,7 @@ if st.session_state["page"] == "Classify Logs":
             with st.spinner("Classifying logs... Please wait ⏳"):
                 try:
                     files = {"file": (uploaded_file.name, uploaded_file.getvalue(), "text/csv")}
-                    response = requests.post("https://log-classifier-backend-a4qw.onrender.com/classify", files=files)
+                    response = requests.post("https://log-classifier-backend-2a78.onrender.com/classify", files=files)
 
                     if response.status_code == 200:
                         classified_csv = response.content
