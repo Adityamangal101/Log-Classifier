@@ -22,7 +22,7 @@ if st.session_state["page"] == "Classify Logs":
     
     st.markdown("Don't have a log file? Download a sample to test 👇")
 
-    with open("../Sample_log_files.csv", "rb") as f:
+    with open("frontend\Sample_log_files.csv", "rb") as f:
          sample_data = f.read()
 
     st.download_button(
