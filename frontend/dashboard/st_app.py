@@ -20,17 +20,22 @@ if "classified_df" not in st.session_state:
 if st.session_state["page"] == "Classify Logs":
     uploaded_file = st.file_uploader("Upload a log CSV file", type=["csv"])
     
-    st.markdown("Don't have a log file? Download a sample to test 👇")
+            # ---------------- SAMPLE LOG FILE DOWNLOAD ----------------
+    st.markdown("### 📂 Need a sample log file? Download below:")
 
-    with open("frontend\Sample_log_files.csv", "rb") as f:
-         sample_data = f.read()
+    try:
+            with open("../Sample_log_files.csv", "rb") as f:
+                sample_data = f.read()
 
-    st.download_button(
-      label="⬇️ Download Sample Log File",
-      data=sample_data,
-      file_name="sample_logs.csv",
-      mime="text/csv",
-    )
+            st.download_button(
+                label="⬇️ Download Sample Log File",
+                data=sample_data,
+                file_name="sample_logs.csv",
+                mime="text/csv",
+            )
+    except FileNotFoundError:
+            st.error("⚠️ Sample log file not found. Check file path or name.")
+
 
     if uploaded_file is not None:
         df = pd.read_csv(uploaded_file)
